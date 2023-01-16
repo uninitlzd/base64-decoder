@@ -26,7 +26,6 @@ const onInputChanged = (evt: any) => {
     // if success
     (parserResult: any) => {
       result = parserResult;
-      console.log(parserResult);
     },
     // if fails
     () => {
@@ -41,10 +40,10 @@ const onInputChanged = (evt: any) => {
   parsed.value = JSON.stringify(result);
 };
 
-const parseBase64Obj = function(obj: any) {
+const parseBase64Obj = function (obj: any) {
   Object.keys(obj).forEach((key) => {
-    if(!whitelist.includes(key))
-      obj[key]=base64regex.test(obj[key])? atob(obj[key]):obj[key];
+    if (!whitelist.includes(key))
+      obj[key] = base64regex.test(obj[key]) ? atob(obj[key]) : obj[key];
   });
 
   return obj;
@@ -59,7 +58,7 @@ const isJsonString = (str: string) => {
   return true;
 };
 
-const tryParseQuery = (str: string, success = (parserResult: any) => {}, failed = () => {}) => {
+const tryParseQuery = (str: string, success = (parserResult: any) => { }, failed = () => { }) => {
   let result = false;
   try {
     let params = JSON.parse(
@@ -108,24 +107,23 @@ const parsedKeyValue = computed<string>(() => {
     <div>
       Input
       <div>
-        <textarea
-          style="width: 100%"
-          v-model="inputStr"
-          @input="onInputChanged"
-        ></textarea>
+        <textarea style="width: 100%" v-model="inputStr" @input="onInputChanged"></textarea>
       </div>
     </div>
     <br />
     <div>
       Output <br />
       <div>
-        JSON Object
-        <editor :config="config" :code="parsed"></editor>
+        <div>JSON Object</div>
+        <!-- <editor :config="config" :code="parsed"></editor> -->
+        <textarea style="width: 500px" :value="JSON.stringify(parsed)"></textarea>
       </div>
       <br />
       <div>
-        Query String
-        <editor :config="config" :code="parsedKeyValue"></editor>
+        <div> Query String
+        </div>
+        <textarea style="width: 500px" :value="parsedKeyValue"></textarea>
+        <!-- <editor :config="config" :code="parsedKeyValue"></editor> -->
       </div>
     </div>
   </div>
