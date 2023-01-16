@@ -37,7 +37,7 @@ const onInputChanged = (evt: any) => {
     }
   );
 
-  parsed.value = JSON.stringify(result);
+  parsed.value = JSON.stringify(result, null, 2);
 };
 
 const parseBase64Obj = function (obj: any) {
@@ -107,7 +107,7 @@ const parsedKeyValue = computed<string>(() => {
     <div>
       Input
       <div>
-        <textarea style="width: 100%" v-model="inputStr" @input="onInputChanged"></textarea>
+        <textarea style="width: 500px" v-model="inputStr" :rows="10" @input="onInputChanged"></textarea>
       </div>
     </div>
     <br />
@@ -116,13 +116,13 @@ const parsedKeyValue = computed<string>(() => {
       <div>
         <div>JSON Object</div>
         <!-- <editor :config="config" :code="parsed"></editor> -->
-        <textarea style="width: 500px" :value="JSON.stringify(parsed)"></textarea>
+        <textarea style="width: 500px" :rows="10" :value="!isJsonString(parsed) ? JSON.stringify(parsed, null, 2) : parsed"></textarea>
       </div>
       <br />
       <div>
         <div> Query String
         </div>
-        <textarea style="width: 500px" :value="parsedKeyValue"></textarea>
+        <textarea style="width: 500px" :rows="10" :value="parsedKeyValue"></textarea>
         <!-- <editor :config="config" :code="parsedKeyValue"></editor> -->
       </div>
     </div>
