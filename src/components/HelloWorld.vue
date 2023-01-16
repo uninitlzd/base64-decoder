@@ -9,10 +9,10 @@ const whitelist = ['action', 'signature'];
 defineProps<{ msg: string }>();
 
 const count = ref(0);
-const inputStr = ref(null);
-const parsed = ref(null);
+const inputStr = ref('');
+const parsed = ref<any>('');
 
-const onInputChanged = (evt) => {
+const onInputChanged = (evt: any) => {
   const str = evt.target.value;
   let result = {};
   if (isJsonString(str)) {
@@ -24,7 +24,7 @@ const onInputChanged = (evt) => {
   tryParseQuery(
     str,
     // if success
-    (parserResult) => {
+    (parserResult: any) => {
       result = parserResult;
       console.log(parserResult);
     },
@@ -41,16 +41,16 @@ const onInputChanged = (evt) => {
   parsed.value = JSON.stringify(result);
 };
 
-const parseBase64Obj = (obj) => {
+const parseBase64Obj = function(obj: any) {
   Object.keys(obj).forEach((key) => {
-    if (!whitelist.includes(key))
-      obj[key] = base64regex.test(obj[key]) ? atob(obj[key]) : obj[key];
+    if(!whitelist.includes(key))
+      obj[key]=base64regex.test(obj[key])? atob(obj[key]):obj[key];
   });
 
   return obj;
 };
 
-const isJsonString = (str) => {
+const isJsonString = (str: string) => {
   try {
     JSON.parse(str);
   } catch (e) {
@@ -59,7 +59,7 @@ const isJsonString = (str) => {
   return true;
 };
 
-const tryParseQuery = (str, success = () => {}, failed = () => {}) => {
+const tryParseQuery = (str: string, success = (parserResult: any) => {}, failed = () => {}) => {
   let result = false;
   try {
     let params = JSON.parse(
@@ -88,7 +88,7 @@ const langCodeMap = reactive(
 );
 const currentLangCode = computed(() => langCodeMap.get(config.language)!);
 
-const parsedKeyValue = computed(() => {
+const parsedKeyValue = computed<string>(() => {
   try {
     if (parsed.value && isJsonString(parsed.value)) {
       const obj = JSON.parse(parsed.value);
@@ -97,6 +97,8 @@ const parsedKeyValue = computed(() => {
   } catch (e) {
     return '';
   }
+
+  return ''
 });
 </script>
 
@@ -118,12 +120,12 @@ const parsedKeyValue = computed(() => {
       Output <br />
       <div>
         JSON Object
-        <editor :config="config" :code.sync="parsed"></editor>
+        <editor :config="config" :code="parsed"></editor>
       </div>
       <br />
       <div>
         Query String
-        <editor :config="config" :code.sync="parsedKeyValue"></editor>
+        <editor :config="config" :code="parsedKeyValue"></editor>
       </div>
     </div>
   </div>
